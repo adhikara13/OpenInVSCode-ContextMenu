@@ -4,7 +4,6 @@ param (
 )
 
 $resourcePath = "$env:LOCALAPPDATA\VisualStudioContextIcon"
-$iconPath = "$PSScriptRoot\vscode.ico"
 $command = "`"$env:LocalAppData\Programs\Microsoft VS Code\Code.exe`" `"%V`""
 $regPath = "Registry::HKEY_CLASSES_ROOT\Directory\Background\shell\OpenInVSCode"
 $cmdRegPath = "$regPath\command"
@@ -13,38 +12,38 @@ if ($Uninstall) {
     # Uninstall
     if (Test-Path -Path $regPath) {
         Remove-Item -Recurse -Force -Path $regPath
-        Write-Host "Cleared registry: $regPath"
+        Write-Output "Cleared registry: $regPath"
     }
 
     if (Test-Path -Path $cmdRegPath) {
         Remove-Item -Recurse -Force -Path $cmdRegPath
-        Write-Host "Cleared registry: $cmdRegPath"
+        Write-Output "Cleared registry: $cmdRegPath"
     }
 
     if (Test-Path -Path $resourcePath) {
         Remove-Item -Recurse -Force -Path $resourcePath
-        Write-Host "Cleared icon content folder: $resourcePath"
+        Write-Output "Cleared icon content folder: $resourcePath"
     }
 
-    Write-Host "Uninstalled 'OpenInVSCode' successfully."
+    Write-Output "Uninstalled 'OpenInVSCode' successfully."
 }
 elseif ($Install) {
     # Install
     # Clear registry
     if (Test-Path -Path $regPath) {
         Remove-Item -Recurse -Force -Path $regPath
-        Write-Host "Cleared registry: $regPath"
+        Write-Output "Cleared registry: $regPath"
     }
 
     if (Test-Path -Path $cmdRegPath) {
         Remove-Item -Recurse -Force -Path $cmdRegPath
-        Write-Host "Cleared registry: $cmdRegPath"
+        Write-Output "Cleared registry: $cmdRegPath"
     }
 
     # Clear resource path
     if (Test-Path -Path $resourcePath) {
         Remove-Item -Recurse -Force -Path $resourcePath
-        Write-Host "Cleared icon content folder: $resourcePath"
+        Write-Output "Cleared icon content folder: $resourcePath"
     }
 
     # Create the resource path directory
@@ -64,5 +63,5 @@ elseif ($Install) {
     [void](New-ItemProperty -Path $regPath -Name "Icon" -PropertyType String -Value "$resourcePath\vscode.ico")
     [void](New-ItemProperty -Path $cmdRegPath -Name "(default)" -PropertyType String -Value $command)
 
-    Write-Host "Installed 'OpenInVSCode' successfully."
+    Write-Output "Installed 'OpenInVSCode' successfully."
 }
